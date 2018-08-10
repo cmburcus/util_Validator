@@ -6,11 +6,82 @@ This utility is used to give the ability to format Joi validation errors. It als
 
 [Joi](https://github.com/hapijs/joi) is added as a dependency in this project to be able to validate schemas
 
+**Table of contents**
+* [Usage](#usage)
+  * validate
+  * formatJoiError
+  * getUniqueFieldError
+* [Docker](#docker)
+* [Development requirements](#requirements-for-evelopment)
+* [Setup](#setup)
+* [Commands](#commands)
+* [Testing](#Testing)
+* [Contributions](#contributions)
+
+---
+
+## Usage
+
+In your `package.json`, add the following dependency:
+
+```
+"validator-util": "git+ssh//git@github.com:cmburcus/util_Validator.git"
+```
+
+Then install your dependencies with `npm` or `yarn`
+
+In your code, import the package:
+
+`const validatorUtil = require('validator-util');`
+
+Use the following functions as required:
+
+`validate(data, schema)` - Returns a Joi validation
+* **data** - The object to be validated
+* **schema** - The Joi schema that data should be validated against
+
+The following settings are used as Joi options when performing a validation:
+
+```
+"abortEarly": false
+"allowUnknown": true
+"stripUnknown": true
+```
+
+`formatJoiError(error)` - Formats a Joi error (produced after a validation failed)
+
+* **error** - Error produced by Joi
+
+```
+Format: {
+   status: failed'
+   original: {
+     key: value,
+   },
+   errors: {
+     key: [
+       {
+         type: joi.error
+         message: Human readable string
+       }
+     ]
+   }
+}
+```
+
+`getUniqueFieldError(name, original)` - Returns error formatted the same way as formatJoiError for a unique field validation error
+* **name** - Object key or path
+* **original** - Original object that was being validated
+
+_NOTE_: The reason why such a function is required is because Joi doesn't allow for async validation and database calls can only be done async. Therefore, you will need to check if the field is unique manually and then throw an error with this format if the validation fails.
+
 ## Docker
 
 To make development and deployment easy, this service makes use of [Docker and Docker Compose](https://docs.docker.com/).
 
----
+**Containers**
+ * node:9.11.1
+   * name: validator_util_node
 
 ## Requirements for Development
 
@@ -20,10 +91,6 @@ Any other system dependencies come already set up using Docker so you do not nee
 
  * Docker >= 18.03
  * Docker Compose >= 1.21
-
-### Containers
- * node:9.11.1
-   * name: validator_util_node
 
 ## Setup
 
