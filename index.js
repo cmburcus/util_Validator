@@ -39,6 +39,7 @@ module.exports = {
     for (let index = 0; index < error.details.length; index++) {
       const errorDetail = error.details[index];
 
+      /* istanbul ignore next */
       if (typeof formattedError.errors[errorDetail.path] === 'undefined') {
         formattedError.errors[errorDetail.path] = [];
       }
