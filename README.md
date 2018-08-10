@@ -25,7 +25,7 @@ This utility is used to give the ability to format Joi validation errors. It als
 In your `package.json`, add the following dependency:
 
 ```
-"validator-util": "git+ssh//git@github.com:cmburcus/util_Validator.git"
+"validator-util": "git+ssh://git@github.com:cmburcus/util_Validator.git"
 ```
 
 Then install your dependencies with `npm` or `yarn`
