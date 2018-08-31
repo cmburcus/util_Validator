@@ -2,8 +2,6 @@
 
 const Joi = require('joi');
 const validationOptions = require('./config/joi.json');
-const messages = require('./constants/messages.json');
-const status = require('./constants/status.json');
 
 module.exports = {
   /**
@@ -15,7 +13,6 @@ module.exports = {
    * formatted object that is more user friendly
    *
    * Format: {
-   *    status: failed'
    *    original: {
    *      key: value,
    *    },
@@ -31,7 +28,6 @@ module.exports = {
    */
   formatJoiError: (error) => {
     const formattedError = {
-      status: status.failed_status,
       original: error._object,
       errors: {},
     };
@@ -39,6 +35,7 @@ module.exports = {
     for (let index = 0; index < error.details.length; index++) {
       const errorDetail = error.details[index];
 
+      // The following comment is required so that code coverage skips next line
       /* istanbul ignore next */
       if (typeof formattedError.errors[errorDetail.path] === 'undefined') {
         formattedError.errors[errorDetail.path] = [];
@@ -61,13 +58,12 @@ module.exports = {
    * and database calls can only be done async.
    */
   getUniqueFieldError: (name, original) => ({
-    status: status.failed_status,
     original: original,
     errors: {
       [name]: [
         {
           type: `field.unique`,
-          message: `${name} ${messages.mustBeUnique}`,
+          message: `${name} must be unique`,
         },
       ],
     },

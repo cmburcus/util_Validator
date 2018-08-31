@@ -14,9 +14,6 @@ describe('TESTING: getUniqueFieldError', () => {
 
     expect(result).to.be.an('object');
     expect(result)
-      .to.have.property('status')
-      .equal('failed');
-    expect(result)
       .to.have.property('original')
       .equal(data);
     expect(result)
