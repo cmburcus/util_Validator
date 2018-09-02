@@ -10,6 +10,9 @@ module.exports = {
    */
   validate: (data, schema) => Joi.validate(data, schema, validationOptions),
 
+  /**
+   * Validates a schema against the request body
+   */
   validateSchema: (schema) => async (request, response, next) => {
     try {
       const result = await Joi.validate(request.body, schema, validationOptions);
@@ -25,6 +28,25 @@ module.exports = {
       next(error);
     }
   },
+
+  /**
+   * Validates that a field in the body is unique. If excludeCurrent is true, then the
+   * id from params will be passed to the unique check function
+   */
+  uniqueField: (field, uniqueCheckFunction, excludeCurrent) => async (request, response, next) => {
+    try {
+      const result = await uniqueCheckFunction(request.body[field], excludeCurrent ? request.params.id : null);
+
+      if (result[0].count > 0) {
+        throw new errorUtil.ValidationError(module.exports.getUniqueFieldError(field, request.body));
+      }
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+
   /**
    * Given a Joi error (produced after a failed validation), this function will return a
    * formatted object that is more user friendly
