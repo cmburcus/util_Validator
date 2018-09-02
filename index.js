@@ -2,12 +2,29 @@
 
 const Joi = require('joi');
 const validationOptions = require('./config/joi.json');
+const errorUtil = require('error-util');
 
 module.exports = {
   /**
    * Returns a Joi validation
    */
   validate: (data, schema) => Joi.validate(data, schema, validationOptions),
+
+  validateSchema: (schema) => async (request, response, next) => {
+    try {
+      const result = await Joi.validate(request.body, schema, validationOptions);
+
+      request.body = result;
+
+      next();
+    } catch (error) {
+      if (error.isJoi) {
+        error = new errorUtil.ValidationError(module.exports.formatJoiError(error));
+      }
+
+      next(error);
+    }
+  },
   /**
    * Given a Joi error (produced after a failed validation), this function will return a
    * formatted object that is more user friendly
