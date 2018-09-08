@@ -34,12 +34,8 @@ module.exports = {
    * id from params will be passed to the unique check function
    */
   uniqueField: (field, uniqueCheckFunction, excludeCurrent) => async (request, response, next) => {
-    console.log('===================');
-    console.log('===================');
-    console.log('===================');
     try {
       const result = await uniqueCheckFunction(request.body[field], excludeCurrent ? request.params.id : null);
-      console.log(result);
 
       if (result[0].count > 0) {
         throw new errorUtil.ValidationError(module.exports.getUniqueFieldError(field, request.body));
@@ -47,12 +43,8 @@ module.exports = {
 
       next();
     } catch (error) {
-      console.log(error);
       next(error);
     }
-    console.log('===================');
-    console.log('===================');
-    console.log('===================');
   },
 
   /**
