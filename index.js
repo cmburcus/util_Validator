@@ -22,7 +22,7 @@ module.exports = {
       next();
     } catch (error) {
       if (error.isJoi) {
-        error = new errorUtil.ValidationError(module.exports.formatJoiError(error));
+        error = errorUtil.getValidationError(module.exports.formatJoiError(error));
       }
 
       next(error);
@@ -35,10 +35,13 @@ module.exports = {
    */
   uniqueField: (field, uniqueCheckFunction, excludeCurrent) => async (request, response, next) => {
     try {
-      const result = await uniqueCheckFunction(request.body[field], excludeCurrent ? request.params.id : null);
+      const result = await uniqueCheckFunction(
+        request.body[field],
+        excludeCurrent ? request.params.id : null
+      );
 
       if (result[0].count > 0) {
-        throw new errorUtil.ValidationError(module.exports.getUniqueFieldError(field, request.body));
+        throw errorUtil.getValidationError(module.exports.getUniqueFieldError(field, request.body));
       }
 
       next();

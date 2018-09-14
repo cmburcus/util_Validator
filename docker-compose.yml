@@ -9,5 +9,11 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    secrets:
+      - host_ssh_key
     stdin_open: true
     tty: true
+
+secrets:
+  host_ssh_key:
+    file: ~/.ssh/id_rsa
