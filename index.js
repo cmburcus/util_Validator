@@ -33,9 +33,16 @@ module.exports = {
    * Validates that a field in the body is unique. If excludeCurrentKey is true, then the
    * value of the key from the request.params will be passed to the unique check function
    */
-  uniqueField: (field, uniqueCheckFunction, excludeCurrentKey) => async (request, response, next) => {
+  uniqueField: (field, uniqueCheckFunction, excludeCurrentKey) => async (
+    request,
+    response,
+    next
+  ) => {
     try {
-      if (typeof field !== 'string' || (excludeCurrentKey && typeof excludeCurrentKey !== 'string')) {
+      if (
+        typeof field !== 'string' ||
+        (excludeCurrentKey && typeof excludeCurrentKey !== 'string')
+      ) {
         throw errorUtil.getInvalidArgumentError();
       }
 
