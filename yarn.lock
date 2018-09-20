@@ -550,9 +550,9 @@ error-ex@^1.2.0:
   dependencies:
     is-arrayish "^0.2.1"
 
-"error-util@git+ssh://git@github.com:cmburcus/util_Errors.git#v1.0":
+"error-util@git+ssh://git@github.com:cmburcus/util_Errors.git#v0.1":
   version "0.0.0"
-  resolved "git+ssh://git@github.com:cmburcus/util_Errors.git#5ae68599ea20623492be365423959cf010625d71"
+  resolved "git+ssh://git@github.com:cmburcus/util_Errors.git#94242087da3874a9f4cec2ead206f71fb0c1bf39"
 
 escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"

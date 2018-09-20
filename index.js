@@ -30,15 +30,27 @@ module.exports = {
   },
 
   /**
-   * Validates that a field in the body is unique. If excludeCurrent is true, then the
-   * id from params will be passed to the unique check function
+   * Validates that a field in the body is unique. If excludeCurrentKey is true, then the
+   * value of the key from the request.params will be passed to the unique check function
    */
-  uniqueField: (field, uniqueCheckFunction, excludeCurrent) => async (request, response, next) => {
+  uniqueField: (field, uniqueCheckFunction, excludeCurrentKey) => async (request, response, next) => {
     try {
-      const result = await uniqueCheckFunction(
-        request.body[field],
-        excludeCurrent ? request.params.id : null
-      );
+      if (typeof field !== 'string' || (excludeCurrentKey && typeof excludeCurrentKey !== 'string')) {
+        throw errorUtil.getInvalidArgumentError();
+      }
+
+      const keyValueList = [{ key: field, value: request.body[field] }];
+
+      // If we need to exclude current, we need to add a key/value pair with a negative condition
+      if (excludeCurrentKey) {
+        keyValueList.push({
+          key: excludeCurrentKey,
+          value: request.params[excludeCurrentKey],
+          condition: '!=',
+        });
+      }
+
+      const result = await uniqueCheckFunction(keyValueList);
 
       if (result[0].count > 0) {
         throw errorUtil.getValidationError(module.exports.getUniqueFieldError(field, request.body));

@@ -37,7 +37,7 @@ describe('TESTING: uniqueField', () => {
     let result = null;
 
     try {
-      await uniqueField('field', truthyCondition, true)(mockRequest, null, function(possibleError) {
+      await uniqueField('field', truthyCondition, 'id')(mockRequest, null, function(possibleError) {
         result = possibleError;
       });
     } catch (error) {
@@ -62,5 +62,39 @@ describe('TESTING: uniqueField', () => {
     expect(result)
       .to.have.property('type')
       .equal('ValidationError');
+  });
+
+  it('it throws an invalid argument error if field is not a string', async () => {
+    let result = null;
+
+    try {
+      await uniqueField(123, truthyCondition)(mockRequest, null, function(possibleError) {
+        result = possibleError;
+      });
+    } catch (error) {
+      result = null;
+    }
+
+    expect(result).to.be.an('error');
+    expect(result)
+      .to.have.property('type')
+      .equal('InvalidArgumentError');
+  });
+
+  it('it throws an invalid argument error if exclude current is not a string', async () => {
+    let result = null;
+
+    try {
+      await uniqueField('field', truthyCondition, 123)(mockRequest, null, function(possibleError) {
+        result = possibleError;
+      });
+    } catch (error) {
+      result = null;
+    }
+
+    expect(result).to.be.an('error');
+    expect(result)
+      .to.have.property('type')
+      .equal('InvalidArgumentError');
   });
 });
