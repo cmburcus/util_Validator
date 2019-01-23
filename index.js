@@ -48,7 +48,7 @@ module.exports = {
 
       // Exclude undefined or null values as postgress doesn't consider them as unique
       if (typeof request.body[field] === 'undefined' || request.body[field] === null) {
-        next();
+        return next();
       }
 
       const keyValueList = [{ key: field, value: request.body[field] }];
