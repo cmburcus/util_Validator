@@ -46,6 +46,11 @@ module.exports = {
         throw errorUtil.getInvalidArgumentError();
       }
 
+      // Exclude undefined or null values as postgress doesn't consider them as unique
+      if (typeof request.body[field] === 'undefined' || request.body[field] === null) {
+        next();
+      }
+
       const keyValueList = [{ key: field, value: request.body[field] }];
 
       // If we need to exclude current, we need to add a key/value pair with a negative condition
